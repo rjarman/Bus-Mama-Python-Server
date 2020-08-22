@@ -1,13 +1,23 @@
 def clean_check(function):
-    validation = ((list, None), ('stop_words', 'punctuation'))
+    validation = [
+        ('sentence', list),
+        ('sentence', str),
+        ('stop_words', list),
+        ('stop_words', None),
+        ('punctuation', list),
+        ('punctuation', None)
+    ]
     def wrapper(*args, **kwargs):
-        for i in kwargs:
-            if i == 'sentence' and not isinstance(kwargs['sentence'], str): raise KeyError(f'Check parameters!')
-            if i in validation[1] and (type(kwargs['stop_words']), type(kwargs['punctuation'])) not in validation: raise KeyError(f'Check parameters!')
+        sentence = args[1] if 'sentence' not in kwargs.items() else kwargs['sentence']
+        for i in kwargs.items():
+            if not isinstance(i, str): continue
+            if (i, type(kwargs[i])) not in validation: raise KeyError(f'Check parameters!')
 
-        if len(args) == 1: pass
-        elif len(args) == 2 and not isinstance(args[1], str): raise KeyError(f'Check parameters!')
-        else: raise KeyError(f'Check parameters!')
+        if len(args) >= 2 and not (isinstance(sentence, str) or isinstance(sentence, list)): raise KeyError(f'Check parameters!')
         
-        yield from function(*args)
+        if isinstance(sentence, list):
+            for i in sentence:
+                yield function(*(args[0], i), **kwargs)
+        else:
+            yield function(*args, **kwargs)
     return wrapper
