@@ -5,6 +5,8 @@ import os
 import csv
 from datetime import datetime
 
+DEFAULT_DIRECTORY = os.path.dirname(__file__) + '/'
+
 class ServerHandler(threading.Thread):
     def __init__(self):
         super().__init__()
@@ -78,9 +80,9 @@ class ContextManager:
     def __init__(self):
         self.__CONFIG = configparser.ConfigParser()
         self.__CONFIG.sections()
-        self.__CONFIG.read('server.ini')
+        self.__CONFIG.read(DEFAULT_DIRECTORY + 'server.ini')
         self.HOST, self.PORT = self.__CONFIG.get('REMOTE', 'HOST'), int(self.__CONFIG.get('REMOTE', 'PORT'))
-        self.LOG_PATH = self.__CONFIG.get('PATH', 'LOG')
+        self.LOG_PATH = DEFAULT_DIRECTORY + self.__CONFIG.get('PATH', 'LOG')
 
         self.server = None
 
