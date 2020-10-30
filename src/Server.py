@@ -1,9 +1,9 @@
-import configparser
 import threading
 import socket
 import os
 import csv
 from datetime import datetime
+from libs.utils.config import Config
 
 DEFAULT_DIRECTORY = os.path.dirname(__file__) + '/'
 
@@ -78,11 +78,8 @@ class LogHandler:
 
 class ContextManager:
     def __init__(self):
-        self.__CONFIG = configparser.ConfigParser()
-        self.__CONFIG.sections()
-        self.__CONFIG.read(DEFAULT_DIRECTORY + 'server.ini')
-        self.HOST, self.PORT = self.__CONFIG.get('REMOTE', 'HOST'), int(self.__CONFIG.get('REMOTE', 'PORT'))
-        self.LOG_PATH = DEFAULT_DIRECTORY + self.__CONFIG.get('PATH', 'LOG')
+        self.HOST, self.PORT = Config.SERVER['host'], Config.SERVER['port']
+        self.LOG_PATH = Config.PATH['log']
 
         self.server = None
 

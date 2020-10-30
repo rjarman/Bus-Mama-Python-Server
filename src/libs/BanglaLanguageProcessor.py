@@ -5,9 +5,9 @@ import pandas as pd
 
 from bangla import Words, Lemmatizer
 from Wrappers import clean_check
+from utils.config import Config
 
 import os
-import configparser
 import pickle
 
 class Preprocessor:
@@ -96,26 +96,19 @@ class Preprocessor:
 
 class ContextManager:
     def __init__(self):
-        # configuring parameters
-
-        self.__dir_path = os.path.dirname(__file__) + '/'
-        self.__CONFIG = configparser.ConfigParser()
-        self.__CONFIG.sections()
-        self.__CONFIG.read(self.__dir_path + 'ai.ini')
-        
         # splitter()
-        self.test_size, self.random_state = float(self.__CONFIG.get('SPLITTER', 'test_size')), float(self.__CONFIG.get('SPLITTER', 'random_state'))
+        self.test_size, self.random_state = Config.SPLITTER['test_size'], Config.SPLITTER['random_state']
         # tfidf_vectorizer()
-        self.max_df = float(self.__CONFIG.get('TfIdf VECTORIZER', 'max_df'))
-        self.min_df = float(self.__CONFIG.get('TfIdf VECTORIZER', 'min_df'))
-        self.max_features = int(self.__CONFIG.get('TfIdf VECTORIZER', 'max_features')) if self.__CONFIG.get('TfIdf VECTORIZER', 'max_features') != 'None' else None
-        self.norm = self.__CONFIG.get('TfIdf VECTORIZER', 'norm')
-        self.smooth_idf = bool(self.__CONFIG.get('TfIdf VECTORIZER', 'smooth_idf'))
-        self.sublinear_tf = bool(self.__CONFIG.get('TfIdf VECTORIZER', 'sublinear_tf'))
+        self.max_df = Config.TFIDF['max_df']
+        self.min_df = Config.TFIDF['min_df']
+        self.max_features = Config.TFIDF['max_features']
+        self.norm = Config.TFIDF['norm']
+        self.smooth_idf = Config.TFIDF['smooth_idf']
+        self.sublinear_tf = Config.TFIDF['sublinear_tf']
         # select_percentile()
-        self.percentile = int(self.__CONFIG.get('SELECT PERCENTILE', 'percentile'))
+        self.percentile = Config.PERCENTILE['percentile']
         # ContextManager
-        self.__WORDS_PATH, self.__TAGS_PATH = self.__dir_path + self.__CONFIG.get('ContextManager', 'WORDS_PATH'), self.__dir_path + self.__CONFIG.get('ContextManager', 'TAGS_PATH')
+        self.__QUESTION_ANS, self.__QUESTION_DOMAIN = Config.PATH['question_ans'], Config.PATH['question_domain']
         
         # handling files data
         self.WORDS_DATA = None
