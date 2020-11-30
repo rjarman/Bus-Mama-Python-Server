@@ -1,0 +1,6 @@
+bangla_questions_ans_bus.pkl:
+[["question", "answer", "tag"]]
+bangla_questions_domain.pkl:
+[{sentences: "", tags: ""}]
+bangla_questions_ans.pkl:
+[{questions: "", answers: ""}]
